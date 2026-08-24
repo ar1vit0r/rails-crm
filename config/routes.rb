@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :leads do
     resources :activities, only: %i[new create]
   end
+
+  resources :activities, only: %i[show edit update destroy]
 end

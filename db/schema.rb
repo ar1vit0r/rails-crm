@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_24_200012) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_24_200215) do
+  create_table "activities", force: :cascade do |t|
+    t.text "body", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.string "kind", null: false
+    t.integer "lead_id"
+    t.datetime "performed_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["contact_id"], name: "index_activities_on_contact_id"
+    t.index ["lead_id"], name: "index_activities_on_lead_id"
+    t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "company"
     t.datetime "created_at", null: false
@@ -52,6 +66,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_24_200012) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "activities", "contacts"
+  add_foreign_key "activities", "leads"
+  add_foreign_key "activities", "users"
   add_foreign_key "contacts", "users"
   add_foreign_key "leads", "contacts"
   add_foreign_key "leads", "users"
