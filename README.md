@@ -45,6 +45,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 bundle exec rspec
+# 57 examples, 0 failures
 ```
 
 ## Models
