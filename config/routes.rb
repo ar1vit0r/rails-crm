@@ -8,4 +8,8 @@ Rails.application.routes.draw do
   resources :contacts do
     resources :activities, only: %i[new create]
   end
+
+  resources :leads do
+    resources :activities, only: %i[new create]
+  end
 end

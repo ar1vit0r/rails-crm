@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  contact: one
+  user: one
+  status: MyString
+  value: 9.99
+  priority: 1
+  closes_at: 2026-08-24
+
+two:
+  title: MyString
+  description: MyText
+  contact: two
+  user: two
+  status: MyString
+  value: 9.99
+  priority: 1
+  closes_at: 2026-08-24
