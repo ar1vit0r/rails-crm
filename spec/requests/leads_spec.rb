@@ -2,13 +2,23 @@ require "rails_helper"
 
 RSpec.describe "Leads", type: :request do
   let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
   let(:contact) { create(:contact, user: user) }
+  let(:other_contact) { create(:contact, user: other_user) }
 
   before { sign_in user }
 
   describe "GET /leads" do
     it "returns http success" do
       get leads_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "filters by status" do
+      create(:lead, user: user, contact: contact, status: "new")
+      create(:lead, user: user, contact: contact, status: "qualified")
+
+      get leads_path, params: { status: "qualified" }
       expect(response).to have_http_status(:ok)
     end
   end
@@ -19,6 +29,12 @@ RSpec.describe "Leads", type: :request do
       get lead_path(lead)
       expect(response).to have_http_status(:ok)
     end
+
+    it "returns 404 for other user's lead" do
+      lead = create(:lead, user: other_user, contact: other_contact)
+      get lead_path(lead)
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe "POST /leads" do
@@ -28,6 +44,11 @@ RSpec.describe "Leads", type: :request do
       }.to change(Lead, :count).by(1)
       expect(response).to redirect_to(lead_path(Lead.last))
     end
+
+    it "returns 422 with invalid params" do
+      post leads_path, params: { lead: { title: "", contact_id: contact.id } }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "PATCH /leads/:id" do
@@ -35,6 +56,12 @@ RSpec.describe "Leads", type: :request do
       lead = create(:lead, user: user, contact: contact)
       patch lead_path(lead), params: { lead: { status: "qualified" } }
       expect(lead.reload.status).to eq("qualified")
+    end
+
+    it "returns 404 for other user's lead" do
+      lead = create(:lead, user: other_user, contact: other_contact)
+      patch lead_path(lead), params: { lead: { status: "qualified" } }
+      expect(response).to have_http_status(:not_found)
     end
   end
 
@@ -45,6 +72,12 @@ RSpec.describe "Leads", type: :request do
         delete lead_path(lead)
       }.to change(Lead, :count).by(-1)
       expect(response).to redirect_to(leads_path)
+    end
+
+    it "returns 404 for other user's lead" do
+      lead = create(:lead, user: other_user, contact: other_contact)
+      delete lead_path(lead)
+      expect(response).to have_http_status(:not_found)
     end
   end
 end
