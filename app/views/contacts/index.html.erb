@@ -1,0 +1,48 @@
+<div class="flex justify-between items-center mb-8">
+  <h1 class="text-2xl font-bold text-gray-100">Contacts</h1>
+  <%= link_to "New Contact", new_contact_path, class: "bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700" %>
+</div>
+
+<div class="mb-6 flex gap-4">
+  <%= form_tag contacts_path, method: :get, class: "flex gap-4" do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search by name or company...", class: "bg-gray-800 border border-gray-700 text-gray-100 px-4 py-2 rounded-lg" %>
+    <%= select_tag :status, options_for_select([["All", ""], ["Lead", "lead"], ["Prospect", "prospect"], ["Customer", "customer"]], params[:status]), class: "bg-gray-800 border border-gray-700 text-gray-100 px-4 py-2 rounded-lg" %>
+    <%= submit_tag "Filter", class: "bg-gray-700 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600" %>
+  <% end %>
+</div>
+
+<% if @contacts.any? %>
+  <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-700">
+        <tr>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-300">Name</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-300">Company</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-300">Email</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-300">Status</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-300">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-700">
+        <% @contacts.each do |contact| %>
+          <tr class="hover:bg-gray-750">
+            <td class="px-4 py-3 text-gray-100"><%= link_to contact.name, contact_path(contact), class: "hover:text-cyan-400" %></td>
+            <td class="px-4 py-3 text-gray-400"><%= contact.company %></td>
+            <td class="px-4 py-3 text-gray-400"><%= contact.email %></td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-1 text-xs rounded <%= contact.lead? ? 'bg-blue-900/50 text-blue-300 border border-blue-700' : contact.prospect? ? 'bg-yellow-900/50 text-yellow-300 border border-yellow-700' : 'bg-green-900/50 text-green-300 border border-green-700' %>">
+                <%= contact.status.humanize %>
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <%= link_to "Edit", edit_contact_path(contact), class: "text-gray-400 hover:text-cyan-400 mr-3" %>
+              <%= button_to "Delete", contact_path(contact), method: :delete, class: "text-gray-400 hover:text-red-400", data: { turbo_confirm: "Are you sure?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <p class="text-gray-400">No contacts found. Create one to get started!</p>
+<% end %>
