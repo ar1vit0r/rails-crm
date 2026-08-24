@@ -2,7 +2,63 @@
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-2xl font-bold text-gray-100">CRM Dashboard</h1>
   </div>
-  <p class="text-gray-400">Welcome back, <%= current_user.email %></p>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h3 class="text-sm text-gray-400 mb-1">Total Contacts</h3>
+      <p class="text-3xl font-bold text-cyan-400"><%= @total_contacts %></p>
+    </div>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h3 class="text-sm text-gray-400 mb-1">Total Leads</h3>
+      <p class="text-3xl font-bold text-cyan-400"><%= @total_leads %></p>
+    </div>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h3 class="text-sm text-gray-400 mb-1">Pipeline Value</h3>
+      <p class="text-3xl font-bold text-green-400">$<%= number_with_precision(@pipeline_value, precision: 2) %></p>
+    </div>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h3 class="text-sm text-gray-400 mb-1">Conversion Rate</h3>
+      <p class="text-3xl font-bold text-yellow-400"><%= @conversion_rate %>%</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h2 class="text-lg font-semibold text-gray-100 mb-4">Leads by Status</h2>
+      <div class="space-y-3">
+        <% %w[new qualified proposal won lost].each do |status| %>
+          <% count = @leads_by_status[status] || 0 %>
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-gray-400 w-24"><%= status.humanize %></span>
+            <div class="flex-1 bg-gray-700 rounded-full h-4">
+              <div class="h-4 rounded-full <%= status == 'won' ? 'bg-green-500' : status == 'lost' ? 'bg-red-500' : status == 'proposal' ? 'bg-purple-500' : status == 'qualified' ? 'bg-yellow-500' : 'bg-blue-500' %>" style="width: <%= @total_leads > 0 ? (count.to_f / @total_leads * 100) : 0 %>%"></div>
+            </div>
+            <span class="text-sm text-gray-300 w-8 text-right"><%= count %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <h2 class="text-lg font-semibold text-gray-100 mb-4">Recent Activities</h2>
+      <% if @recent_activities.any? %>
+        <div class="space-y-3">
+          <% @recent_activities.each do |activity| %>
+            <div class="bg-gray-700 rounded-lg p-3">
+              <div class="flex justify-between items-start">
+                <span class="px-2 py-1 text-xs rounded bg-gray-600 text-gray-300"><%= activity.kind.humanize %></span>
+                <span class="text-xs text-gray-400"><%= activity.performed_at&.strftime("%b %d") %></span>
+              </div>
+              <p class="text-sm text-gray-300 mt-1 truncate"><%= activity.body %></p>
+              <p class="text-xs text-gray-400 mt-1"><%= activity.contact.name %><%= " — #{activity.lead.title}" if activity.lead %></p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-400">No activities yet.</p>
+      <% end %>
+    </div>
+  </div>
 <% else %>
   <div class="text-center py-16">
     <h1 class="text-4xl font-bold text-gray-100 mb-4">CRM Dashboard</h1>
