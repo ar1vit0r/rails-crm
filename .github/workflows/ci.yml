@@ -19,6 +19,15 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Lint
+        run: bin/rubocop
+
+      - name: Security scan
+        run: bin/brakeman --no-pager
+
+      - name: Audit dependencies
+        run: bundle exec bundler-audit --update
+
       - name: Setup database
         run: bin/rails db:create db:migrate
         env:
