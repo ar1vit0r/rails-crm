@@ -13,7 +13,7 @@ class ActivitiesController < ApplicationController
       @lead = current_user.leads.find(params[:lead_id])
       @contact = @lead.contact
       @activity = @lead.activities.new(contact: @contact, performed_at: Time.current)
-      @leads = [@lead]
+      @leads = [ @lead ]
     end
   end
 
