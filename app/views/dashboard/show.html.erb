@@ -1,71 +1,96 @@
 <% if user_signed_in? %>
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-2xl font-bold text-gray-100">CRM Dashboard</h1>
-  </div>
+  <%
+    stages = {
+      "new_lead" => "bg-stage-new",
+      "qualified" => "bg-stage-qualified",
+      "proposal" => "bg-stage-proposal",
+      "won" => "bg-stage-won",
+      "lost" => "bg-stage-lost"
+    }
+    counts = stages.keys.index_with { |status| @leads_by_status[status] || 0 }
+    label = ->(status) { status.delete_suffix("_lead").humanize }
+  %>
 
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h3 class="text-sm text-gray-400 mb-1">Total Contacts</h3>
-      <p class="text-3xl font-bold text-cyan-400"><%= @total_contacts %></p>
-    </div>
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h3 class="text-sm text-gray-400 mb-1">Total Leads</h3>
-      <p class="text-3xl font-bold text-cyan-400"><%= @total_leads %></p>
-    </div>
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h3 class="text-sm text-gray-400 mb-1">Pipeline Value</h3>
-      <p class="text-3xl font-bold text-green-400">$<%= number_with_precision(@pipeline_value, precision: 2) %></p>
-    </div>
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h3 class="text-sm text-gray-400 mb-1">Conversion Rate</h3>
-      <p class="text-3xl font-bold text-yellow-400"><%= @conversion_rate %>%</p>
-    </div>
-  </div>
+  <h1 class="display text-5xl md:text-7xl font-extrabold text-bone max-w-3xl">
+    <% if @total_leads.zero? %>
+      No leads yet.
+    <% else %>
+      <%= counts["won"] %> of your <%= pluralize(@total_leads, "lead") %> are won.
+    <% end %>
+  </h1>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h2 class="text-lg font-semibold text-gray-100 mb-4">Leads by Status</h2>
-      <div class="space-y-3">
-        <% %w[new qualified proposal won lost].each do |status| %>
-          <% count = @leads_by_status[status] || 0 %>
-          <div class="flex items-center gap-3">
-            <span class="text-sm text-gray-400 w-24"><%= status.humanize %></span>
-            <div class="flex-1 bg-gray-700 rounded-full h-4">
-              <div class="h-4 rounded-full <%= status == 'won' ? 'bg-green-500' : status == 'lost' ? 'bg-red-500' : status == 'proposal' ? 'bg-purple-500' : status == 'qualified' ? 'bg-yellow-500' : 'bg-blue-500' %>" style="width: <%= @total_leads > 0 ? (count.to_f / @total_leads * 100) : 0 %>%"></div>
-            </div>
-            <span class="text-sm text-gray-300 w-8 text-right"><%= count %></span>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h2 class="text-lg font-semibold text-gray-100 mb-4">Recent Activities</h2>
-      <% if @recent_activities.any? %>
-        <div class="space-y-3">
-          <% @recent_activities.each do |activity| %>
-            <div class="bg-gray-700 rounded-lg p-3">
-              <div class="flex justify-between items-start">
-                <span class="px-2 py-1 text-xs rounded bg-gray-600 text-gray-300"><%= activity.kind.humanize %></span>
-                <span class="text-xs text-gray-400"><%= activity.performed_at&.strftime("%b %d") %></span>
-              </div>
-              <p class="text-sm text-gray-300 mt-1 truncate"><%= activity.body %></p>
-              <p class="text-xs text-gray-400 mt-1"><%= activity.contact.name %><%= " — #{activity.lead.title}" if activity.lead %></p>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="text-gray-400">No activities yet.</p>
+  <% if @total_leads.zero? %>
+    <p class="mt-6 text-gray-300">
+      Add a lead to see your pipeline.
+      <%= link_to "Add a lead", new_lead_path, class: "text-marigold underline underline-offset-4 hover:text-bone" %>
+    </p>
+  <% else %>
+    <div class="mt-10 flex gap-0.5 h-10" role="img"
+         aria-label="Leads by status: <%= counts.map { |status, count| "#{count} #{label.(status).downcase}" }.join(', ') %>">
+      <% counts.select { |_, count| count.positive? }.each_with_index do |(status, count), i| %>
+        <div class="pipeline-segment <%= stages[status] %>" style="flex-grow: <%= count %>; animation-delay: <%= i * 80 %>ms"></div>
       <% end %>
     </div>
-  </div>
+
+    <dl class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-4">
+      <% counts.each do |status, count| %>
+        <div>
+          <dt class="text-sm text-gray-400 flex items-center gap-2">
+            <span class="inline-block h-1 w-4 <%= stages[status] %>"></span><%= label.(status) %>
+          </dt>
+          <dd class="display text-4xl font-bold tabular-nums"><%= count %></dd>
+        </div>
+      <% end %>
+    </dl>
+  <% end %>
+
+  <dl class="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 border-y border-gray-700 py-6">
+    <div>
+      <dt class="text-sm text-gray-400">Contacts</dt>
+      <dd class="display text-4xl font-bold tabular-nums"><%= @total_contacts %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-400">Won value</dt>
+      <dd class="display text-4xl font-bold tabular-nums text-marigold">$<%= number_with_precision(@pipeline_value, precision: 2) %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-400">Conversion rate</dt>
+      <dd class="display text-4xl font-bold tabular-nums"><%= @conversion_rate %>%</dd>
+    </div>
+  </dl>
+
+  <section class="mt-14 max-w-2xl">
+    <h2 class="text-xl font-semibold mb-6">Recent activity</h2>
+    <% if @recent_activities.any? %>
+      <ol class="border-l border-gray-600">
+        <% @recent_activities.each do |activity| %>
+          <li class="relative pl-6 pb-6 last:pb-0">
+            <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-gray-600 ring-4 ring-gray-900"></span>
+            <div class="flex justify-between gap-4">
+              <p>
+                <span class="font-semibold"><%= activity.kind.humanize %></span>
+                <span class="text-gray-400">with <%= activity.contact.name %><%= " on #{activity.lead.title}" if activity.lead %></span>
+              </p>
+              <time class="text-sm text-gray-400 shrink-0 tabular-nums" datetime="<%= activity.performed_at&.iso8601 %>"><%= activity.performed_at&.strftime("%b %d") %></time>
+            </div>
+            <p class="mt-1 text-gray-300 truncate"><%= activity.body %></p>
+          </li>
+        <% end %>
+      </ol>
+    <% else %>
+      <p class="text-gray-300">
+        No activity yet. Log a call or note from a contact.
+        <%= link_to "Go to contacts", contacts_path, class: "text-marigold underline underline-offset-4 hover:text-bone" %>
+      </p>
+    <% end %>
+  </section>
 <% else %>
-  <div class="text-center py-16">
-    <h1 class="text-4xl font-bold text-gray-100 mb-4">CRM Dashboard</h1>
-    <p class="text-xl text-gray-400 mb-8">Manage your contacts, leads, and activities.</p>
-    <div class="flex justify-center gap-4">
-      <%= link_to "Sign up", new_user_registration_path, class: "bg-cyan-600 text-white px-8 py-3 rounded-lg hover:bg-cyan-700 text-lg" %>
-      <%= link_to "Login", new_user_session_path, class: "bg-gray-800 text-gray-300 px-8 py-3 rounded-lg hover:bg-gray-700 text-lg border border-gray-700" %>
+  <div class="py-12 md:py-24 max-w-3xl">
+    <h1 class="display text-5xl md:text-7xl font-extrabold text-bone">Every contact, lead and call in one place.</h1>
+    <p class="mt-6 text-lg text-gray-300 max-w-xl">Track who you talked to, what you offered, and what closed.</p>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <%= link_to "Sign up", new_user_registration_path, class: "bg-marigold text-spruce font-semibold px-8 py-3 rounded-md hover:bg-bone text-lg" %>
+      <%= link_to "Login", new_user_session_path, class: "border border-gray-500 text-bone px-8 py-3 rounded-md hover:bg-gray-800 text-lg" %>
     </div>
   </div>
 <% end %>

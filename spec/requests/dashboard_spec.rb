@@ -38,6 +38,14 @@ RSpec.describe "Dashboard", type: :request do
         expect(response.body).to include("15000")
       end
 
+      it "counts new leads in the pipeline" do
+        contact = create(:contact, user: user)
+        create_list(:lead, 2, user: user, contact: contact, status: "new_lead")
+
+        get root_path
+        expect(response.body).to include("2 new")
+      end
+
       it "displays conversion rate" do
         contact = create(:contact, user: user)
         create(:lead, user: user, contact: contact, status: "won")
