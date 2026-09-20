@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-gray-900 text-gray-100">
+    <% nav_link = ->(path) { "py-1 border-b-2 #{request.path.start_with?(path) ? 'border-marigold text-bone' : 'border-transparent text-gray-400 hover:text-bone'}" } %>
     <nav class="bg-gray-800 border-b border-gray-700">
       <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <%= link_to "CRM", root_path, class: "text-xl font-bold text-cyan-400" %>
+        <%= link_to "CRM", root_path, class: "display text-3xl font-extrabold text-marigold" %>
         <div class="flex items-center gap-4">
           <% if user_signed_in? %>
-            <%= link_to "Contacts", contacts_path, class: "text-gray-300 hover:text-cyan-400" %>
-            <%= link_to "Leads", leads_path, class: "text-gray-300 hover:text-cyan-400" %>
-            <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "text-gray-300 hover:text-cyan-400" %>
+            <%= link_to "Contacts", contacts_path, class: nav_link.(contacts_path) %>
+            <%= link_to "Leads", leads_path, class: nav_link.(leads_path) %>
+            <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "py-1 border-b-2 border-transparent text-gray-400 hover:text-bone cursor-pointer" %>
           <% else %>
             <%= link_to "Login", new_user_session_path, class: "text-gray-300 hover:text-cyan-400" %>
             <%= link_to "Sign up", new_user_registration_path, class: "bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700" %>
