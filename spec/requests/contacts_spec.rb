@@ -20,6 +20,15 @@ RSpec.describe "Contacts", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it "matches the search term case-insensitively" do
+      create(:contact, user: user, name: "John Doe")
+      create(:contact, user: user, name: "Jane Smith")
+
+      get contacts_path, params: { search: "jOHN" }
+      expect(response.body).to include("John Doe")
+      expect(response.body).not_to include("Jane Smith")
+    end
+
     it "filters by status" do
       create(:contact, user: user, status: "lead")
       create(:contact, user: user, status: "customer")

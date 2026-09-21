@@ -4,7 +4,7 @@ class ContactsController < ApplicationController
 
   def index
     @contacts = current_user.contacts.order(created_at: :desc)
-    @contacts = @contacts.where("name LIKE ? OR company LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+    @contacts = @contacts.where("LOWER(name) LIKE LOWER(?) OR LOWER(company) LIKE LOWER(?)", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
     @contacts = @contacts.where(status: params[:status]) if params[:status].present?
   end
 
