@@ -20,7 +20,7 @@ RSpec.describe "Contacts", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it "matches the search term case-insensitively" do
+    it "shows only contacts matching the search term" do
       create(:contact, user: user, name: "John Doe")
       create(:contact, user: user, name: "Jane Smith")
 
