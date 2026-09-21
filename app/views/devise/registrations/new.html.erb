@@ -1,29 +1,27 @@
-<h2>Sign up</h2>
+<h1 class="display text-4xl md:text-5xl font-extrabold text-bone">Sign up</h1>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 max-w-md space-y-4" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+  <div>
+    <%= f.label :email, class: "block text-sm text-gray-400 mb-1" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password %></p>
+  <div>
+    <%= f.label :password, class: "block text-sm text-gray-400 mb-1" %>
+    <%= f.password_field :password, autocomplete: "new-password", class: "input" %>
     <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
+      <p class="mt-1 text-sm text-gray-400"><%= @minimum_password_length %> characters minimum</p>
     <% end %>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
+  <div>
+    <%= f.label :password_confirmation, class: "block text-sm text-gray-400 mb-1" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
+  <%= f.submit "Sign up", class: "btn-primary" %>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<div class="mt-8"><%= render "devise/shared/links" %></div>

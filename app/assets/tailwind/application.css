@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 /* Palette: spruce ground, lichen text, marigold for what closes.
-   The existing views hardcode gray-* and cyan-*, so remapping those scales
-   re-themes every page at once; new markup uses the named tokens. */
+   The views still use gray-* as neutral steps, so that scale is remapped to
+   the spruce ramp; accents come from the named tokens. */
 @theme {
   --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
 
@@ -30,11 +30,6 @@
   --color-gray-300: #b7cdc3;
   --color-gray-200: #d5e1da;
   --color-gray-100: var(--color-bone);
-
-  --color-cyan-400: var(--color-marigold);
-  --color-cyan-500: #e0a21f;
-  --color-cyan-600: #8f5e00; /* white text on this is 5.6:1 */
-  --color-cyan-700: #7a5200;
 }
 
 /* Native date pickers and select menus follow the dark ground. */
