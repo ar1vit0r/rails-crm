@@ -4,7 +4,7 @@ RSpec.describe LeadsHelper, type: :helper do
   describe "#stage_border" do
     it "maps every lead status to a border class" do
       Lead.statuses.each_key do |status|
-        expect(helper.stage_border(build(:lead, status: status))).to start_with("border-stage-")
+        expect(helper.stage_border(build(:lead, status: status))).to start_with("border-l-stage-")
       end
     end
   end

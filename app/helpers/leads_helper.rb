@@ -2,11 +2,11 @@ module LeadsHelper
   # Full class names so Tailwind's scanner sees them. Same colors as the
   # dashboard's pipeline strip: a stage color means one thing everywhere.
   STAGE_BORDERS = {
-    "new_lead" => "border-stage-new",
-    "qualified" => "border-stage-qualified",
-    "proposal" => "border-stage-proposal",
-    "won" => "border-stage-won",
-    "lost" => "border-stage-lost"
+    "new_lead" => "border-l-stage-new",
+    "qualified" => "border-l-stage-qualified",
+    "proposal" => "border-l-stage-proposal",
+    "won" => "border-l-stage-won",
+    "lost" => "border-l-stage-lost"
   }.freeze
 
   def stage_border(lead)
