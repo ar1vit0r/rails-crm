@@ -1,9 +1,9 @@
-<h1 class="text-2xl font-bold text-gray-100 mb-8">Edit Lead</h1>
+<h1 class="display text-4xl md:text-5xl font-extrabold text-bone">Edit lead</h1>
 
-<div class="bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl">
+<div class="mt-8 max-w-xl">
   <%= form_with model: @lead, local: true do |f| %>
     <% if @lead.errors.any? %>
-      <div class="bg-red-900/50 text-red-300 border border-red-700 px-4 py-2 rounded mb-4">
+      <div role="alert" class="bg-moss text-madder border-l-4 border-madder px-4 py-2 mb-6">
         <ul class="list-disc list-inside">
           <% @lead.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
@@ -15,35 +15,35 @@
     <div class="space-y-4">
       <div>
         <%= f.label :title, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.text_field :title, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.text_field :title, class: "input" %>
       </div>
       <div>
         <%= f.label :description, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.text_area :description, rows: 3, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.text_area :description, rows: 3, class: "input" %>
       </div>
       <div>
         <%= f.label :contact_id, "Contact", class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.collection_select :contact_id, @contacts, :id, :name, {}, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.collection_select :contact_id, @contacts, :id, :name, {}, class: "input" %>
       </div>
       <div>
         <%= f.label :status, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.select :status, options_for_select([["New", "new"], ["Qualified", "qualified"], ["Proposal", "proposal"], ["Won", "won"], ["Lost", "lost"]], @lead.status), {}, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.select :status, options_for_select([["New", "new"], ["Qualified", "qualified"], ["Proposal", "proposal"], ["Won", "won"], ["Lost", "lost"]], @lead.status), {}, class: "input" %>
       </div>
       <div>
         <%= f.label :value, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.number_field :value, step: 0.01, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.number_field :value, step: 0.01, class: "input" %>
       </div>
       <div>
         <%= f.label :priority, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.select :priority, options_for_select([["Low", "low"], ["Medium", "medium"], ["High", "high"]], @lead.priority), {}, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.select :priority, options_for_select([["Low", "low"], ["Medium", "medium"], ["High", "high"]], @lead.priority), {}, class: "input" %>
       </div>
       <div>
         <%= f.label :closes_at, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.date_field :closes_at, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.date_field :closes_at, class: "input" %>
       </div>
       <div class="flex gap-4">
-        <%= f.submit "Update Lead", class: "bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700" %>
-        <%= link_to "Cancel", lead_path(@lead), class: "bg-gray-700 text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-600" %>
+        <%= f.submit "Update lead", class: "btn-primary" %>
+        <%= link_to "Cancel", lead_path(@lead), class: "btn-quiet" %>
       </div>
     </div>
   <% end %>

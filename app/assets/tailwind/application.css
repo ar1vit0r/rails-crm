@@ -37,6 +37,11 @@
   --color-cyan-700: #7a5200;
 }
 
+/* Native date pickers and select menus follow the dark ground. */
+:root {
+  color-scheme: dark;
+}
+
 .display {
   font-stretch: 78%;
   letter-spacing: -0.02em;

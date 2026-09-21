@@ -1,11 +1,11 @@
-<h1 class="text-2xl font-bold text-gray-100 mb-8">Log Activity</h1>
+<h1 class="display text-4xl md:text-5xl font-extrabold text-bone">Log activity</h1>
 
-<div class="bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl">
+<div class="mt-8 max-w-xl">
   <p class="text-sm text-gray-400 mb-4">Contact: <%= @contact.name %></p>
 
   <%= form_with model: @activity, url: contact_activities_path(@contact), local: true do |f| %>
     <% if @activity.errors.any? %>
-      <div class="bg-red-900/50 text-red-300 border border-red-700 px-4 py-2 rounded mb-4">
+      <div role="alert" class="bg-moss text-madder border-l-4 border-madder px-4 py-2 mb-6">
         <ul class="list-disc list-inside">
           <% @activity.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
@@ -17,23 +17,23 @@
     <div class="space-y-4">
       <div>
         <%= f.label :kind, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.select :kind, options_for_select([["Note", "note"], ["Call", "call"], ["Email", "email"], ["Meeting", "meeting"]], @activity.kind), {}, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.select :kind, options_for_select([["Note", "note"], ["Call", "call"], ["Email", "email"], ["Meeting", "meeting"]], @activity.kind), {}, class: "input" %>
       </div>
       <div>
-        <%= f.label :lead_id, "Related Lead (optional)", class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.collection_select :lead_id, @leads, :id, :title, { include_blank: "None" }, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.label :lead_id, "Related lead (optional)", class: "block text-sm text-gray-400 mb-1" %>
+        <%= f.collection_select :lead_id, @leads, :id, :title, { include_blank: "None" }, class: "input" %>
       </div>
       <div>
         <%= f.label :body, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.text_area :body, rows: 4, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.text_area :body, rows: 4, class: "input" %>
       </div>
       <div>
         <%= f.label :performed_at, class: "block text-sm text-gray-400 mb-1" %>
-        <%= f.datetime_field :performed_at, class: "w-full bg-gray-700 border border-gray-600 text-gray-100 px-4 py-2 rounded-lg" %>
+        <%= f.datetime_field :performed_at, class: "input" %>
       </div>
       <div class="flex gap-4">
-        <%= f.submit "Log Activity", class: "bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700" %>
-        <%= link_to "Cancel", contact_path(@contact), class: "bg-gray-700 text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-600" %>
+        <%= f.submit "Log activity", class: "btn-primary" %>
+        <%= link_to "Cancel", contact_path(@contact), class: "btn-quiet" %>
       </div>
     </div>
   <% end %>
