@@ -11,13 +11,13 @@
   <% end %>
 </nav>
 
-<% if @leads.any? %>
+<% if @leads.present? %>
   <ul class="mt-8 border-y border-gray-700 divide-y divide-gray-700">
     <% @leads.each do |lead| %>
-      <li class="flex items-center gap-4 border-l-4 py-4 pl-4 <%= stage_border(lead) %>">
+      <li class="flex items-center gap-4 border-l-4 py-4 pl-4 <%= stage_border(lead.status) %>">
         <div class="min-w-0 flex-1">
           <%= link_to lead.title, lead_path(lead), class: "block truncate text-lg font-semibold text-bone hover:text-lichen" %>
-          <p class="truncate text-sm text-gray-400"><span class="text-gray-300"><%= stage_label(lead) %></span> for <%= lead.contact.name %></p>
+          <p class="truncate text-sm text-gray-400"><span class="text-gray-300"><%= stage_label(lead.status) %></span> for <%= lead.contact.name %></p>
         </div>
         <div class="text-right">
           <p class="display text-2xl font-bold tabular-nums">$<%= number_with_precision(lead.value, precision: 2) %></p>

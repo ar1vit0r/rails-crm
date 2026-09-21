@@ -1,15 +1,5 @@
 <% if user_signed_in? %>
-  <%
-    stages = {
-      "new_lead" => "bg-stage-new",
-      "qualified" => "bg-stage-qualified",
-      "proposal" => "bg-stage-proposal",
-      "won" => "bg-stage-won",
-      "lost" => "bg-stage-lost"
-    }
-    counts = stages.keys.index_with { |status| @leads_by_status[status] || 0 }
-    label = ->(status) { status.delete_suffix("_lead").humanize }
-  %>
+  <% counts = LeadsHelper::STAGES.keys.index_with { |status| @leads_by_status[status] || 0 } %>
 
   <h1 class="display text-5xl md:text-7xl font-extrabold text-bone max-w-3xl">
     <% if @total_leads.zero? %>
@@ -26,9 +16,9 @@
     </p>
   <% else %>
     <div class="mt-10 flex gap-0.5 h-10" role="img"
-         aria-label="Leads by status: <%= counts.map { |status, count| "#{count} #{label.(status).downcase}" }.join(', ') %>">
+         aria-label="Leads by status: <%= counts.map { |status, count| "#{count} #{stage_label(status).downcase}" }.join(', ') %>">
       <% counts.select { |_, count| count.positive? }.each_with_index do |(status, count), i| %>
-        <div class="pipeline-segment <%= stages[status] %>" style="flex-grow: <%= count %>; animation-delay: <%= i * 80 %>ms"></div>
+        <div class="pipeline-segment <%= stage_bg(status) %>" style="flex-grow: <%= count %>; animation-delay: <%= i * 80 %>ms"></div>
       <% end %>
     </div>
 
@@ -36,7 +26,7 @@
       <% counts.each do |status, count| %>
         <div>
           <dt class="text-sm text-gray-400 flex items-center gap-2">
-            <span class="inline-block h-1 w-4 <%= stages[status] %>"></span><%= label.(status) %>
+            <span class="inline-block h-1 w-4 <%= stage_bg(status) %>"></span><%= stage_label(status) %>
           </dt>
           <dd class="display text-4xl font-bold tabular-nums"><%= count %></dd>
         </div>
@@ -61,7 +51,7 @@
 
   <section class="mt-14 max-w-2xl">
     <h2 class="text-xl font-semibold mb-6">Recent activity</h2>
-    <% if @recent_activities.any? %>
+    <% if @recent_activities.present? %>
       <ol class="border-l border-gray-600">
         <% @recent_activities.each do |activity| %>
           <li class="relative pl-6 pb-6 last:pb-0">

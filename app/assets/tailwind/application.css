@@ -18,8 +18,8 @@
   --color-stage-won: var(--color-marigold);
   --color-stage-lost: #6a857f;
 
-  /* Errors and destructive actions only. 5:1 on spruce. */
-  --color-madder: #e07a70;
+  /* Errors and destructive actions only. 4.8:1 on moss, 6:1 on spruce. */
+  --color-madder: #ea8f85;
 
   --color-gray-900: var(--color-spruce);
   --color-gray-800: var(--color-moss);
@@ -52,7 +52,7 @@
    primary action is bone on spruce. */
 @layer components {
   .input {
-    @apply w-full rounded-md border border-gray-600 bg-moss px-3 py-2 text-bone placeholder:text-gray-500;
+    @apply w-full rounded-md border border-gray-500 bg-moss px-3 py-2 text-bone placeholder:text-gray-400;
   }
 
   .btn-primary,

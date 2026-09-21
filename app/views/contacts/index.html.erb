@@ -11,7 +11,7 @@
   <%= submit_tag "Filter", class: "btn-quiet" %>
 <% end %>
 
-<% if @contacts.any? %>
+<% if @contacts.present? %>
   <ul class="mt-8 border-y border-gray-700 divide-y divide-gray-700">
     <% @contacts.each do |contact| %>
       <li class="flex items-center gap-4 py-4">

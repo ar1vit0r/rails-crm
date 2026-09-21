@@ -24,7 +24,7 @@
 
   <section class="max-w-2xl">
     <h2 class="text-xl font-semibold mb-6">Activity</h2>
-    <% if @activities.any? %>
+    <% if @activities.present? %>
       <%= render "activities/timeline", activities: @activities, show_lead: true %>
     <% else %>
       <p class="text-gray-300">
