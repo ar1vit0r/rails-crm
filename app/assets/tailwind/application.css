@@ -18,6 +18,9 @@
   --color-stage-won: var(--color-marigold);
   --color-stage-lost: #6a857f;
 
+  /* Errors and destructive actions only. 5:1 on spruce. */
+  --color-madder: #e07a70;
+
   --color-gray-900: var(--color-spruce);
   --color-gray-800: var(--color-moss);
   --color-gray-700: #245650;
@@ -43,6 +46,27 @@
 :focus-visible {
   outline: 2px solid var(--color-marigold);
   outline-offset: 2px;
+}
+
+/* Shared form and button styles. Marigold stays reserved for won, so the
+   primary action is bone on spruce. */
+@layer components {
+  .input {
+    @apply w-full rounded-md border border-gray-600 bg-moss px-3 py-2 text-bone placeholder:text-gray-500;
+  }
+
+  .btn-primary,
+  .btn-quiet {
+    @apply inline-flex items-center rounded-md px-4 py-2 font-semibold cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply bg-bone text-spruce hover:bg-gray-200;
+  }
+
+  .btn-quiet {
+    @apply border border-gray-500 text-bone hover:bg-moss;
+  }
 }
 
 /* The one motion: pipeline segments settle in from the left. */

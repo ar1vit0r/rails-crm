@@ -22,7 +22,7 @@
   <% if @total_leads.zero? %>
     <p class="mt-6 text-gray-300">
       Add a lead to see your pipeline.
-      <%= link_to "Add a lead", new_lead_path, class: "text-marigold underline underline-offset-4 hover:text-bone" %>
+      <%= link_to "Add a lead", new_lead_path, class: "text-bone underline underline-offset-4 hover:text-lichen" %>
     </p>
   <% else %>
     <div class="mt-10 flex gap-0.5 h-10" role="img"
@@ -80,7 +80,7 @@
     <% else %>
       <p class="text-gray-300">
         No activity yet. Log a call or note from a contact.
-        <%= link_to "Go to contacts", contacts_path, class: "text-marigold underline underline-offset-4 hover:text-bone" %>
+        <%= link_to "Go to contacts", contacts_path, class: "text-bone underline underline-offset-4 hover:text-lichen" %>
       </p>
     <% end %>
   </section>
@@ -89,8 +89,8 @@
     <h1 class="display text-5xl md:text-7xl font-extrabold text-bone">Every contact, lead and call in one place.</h1>
     <p class="mt-6 text-lg text-gray-300 max-w-xl">Track who you talked to, what you offered, and what closed.</p>
     <div class="mt-10 flex flex-wrap gap-4">
-      <%= link_to "Sign up", new_user_registration_path, class: "bg-marigold text-spruce font-semibold px-8 py-3 rounded-md hover:bg-bone text-lg" %>
-      <%= link_to "Login", new_user_session_path, class: "border border-gray-500 text-bone px-8 py-3 rounded-md hover:bg-gray-800 text-lg" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn-primary px-8 py-3 text-lg" %>
+      <%= link_to "Login", new_user_session_path, class: "btn-quiet px-8 py-3 text-lg" %>
     </div>
   </div>
 <% end %>
