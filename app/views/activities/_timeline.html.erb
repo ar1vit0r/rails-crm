@@ -1,0 +1,16 @@
+<%# locals: (activities:, show_lead: false) %>
+<ol class="border-l border-gray-600">
+  <% activities.each do |activity| %>
+    <li class="relative pl-6 pb-6 last:pb-0">
+      <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-gray-600 ring-4 ring-gray-900"></span>
+      <div class="flex justify-between gap-4">
+        <%= link_to activity.kind.humanize, activity_path(activity), class: "font-semibold text-bone hover:text-lichen" %>
+        <time class="text-sm text-gray-400 shrink-0 tabular-nums" datetime="<%= activity.performed_at&.iso8601 %>"><%= activity.performed_at&.strftime("%b %d, %Y") %></time>
+      </div>
+      <p class="mt-1 text-gray-300"><%= activity.body %></p>
+      <% if show_lead && activity.lead %>
+        <p class="mt-1 text-sm text-gray-400">On <%= link_to activity.lead.title, lead_path(activity.lead), class: "underline underline-offset-4 hover:text-bone" %></p>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

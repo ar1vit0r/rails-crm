@@ -1,24 +1,29 @@
-<h1 class="text-2xl font-bold text-gray-100 mb-8">Activity</h1>
+<h1 class="display text-4xl md:text-5xl font-extrabold text-bone"><%= @activity.kind.humanize %></h1>
+<p class="mt-2 text-gray-400">
+  <time datetime="<%= @activity.performed_at&.iso8601 %>"><%= @activity.performed_at&.strftime("%b %d, %Y %H:%M") %></time>
+</p>
 
-<div class="bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl">
-  <div class="flex justify-between items-start mb-4">
-    <span class="px-3 py-1 text-sm rounded bg-gray-700 text-gray-300"><%= @activity.kind.humanize %></span>
-    <span class="text-sm text-gray-400"><%= @activity.performed_at&.strftime("%b %d, %Y %H:%M") %></span>
+<p class="mt-8 max-w-prose text-lg text-bone"><%= @activity.body %></p>
+
+<dl class="mt-8 space-y-3 text-sm">
+  <div>
+    <dt class="text-gray-400">Contact</dt>
+    <dd><%= link_to @activity.contact.name, contact_path(@activity.contact), class: "text-bone underline underline-offset-4 hover:text-lichen" %></dd>
   </div>
-
-  <p class="text-gray-100 mb-4"><%= @activity.body %></p>
-
-  <div class="text-sm text-gray-400 space-y-1">
-    <p>Contact: <%= link_to @activity.contact.name, contact_path(@activity.contact), class: "hover:text-cyan-400" %></p>
-    <% if @activity.lead %>
-      <p>Lead: <%= link_to @activity.lead.title, lead_path(@activity.lead), class: "hover:text-cyan-400" %></p>
-    <% end %>
-    <p>Logged by: <%= @activity.user.email %></p>
+  <% if @activity.lead %>
+    <div>
+      <dt class="text-gray-400">Lead</dt>
+      <dd><%= link_to @activity.lead.title, lead_path(@activity.lead), class: "text-bone underline underline-offset-4 hover:text-lichen" %></dd>
+    </div>
+  <% end %>
+  <div>
+    <dt class="text-gray-400">Logged by</dt>
+    <dd class="text-bone"><%= @activity.user.email %></dd>
   </div>
+</dl>
 
-  <div class="flex gap-4 mt-6">
-    <%= link_to "Edit", edit_activity_path(@activity), class: "bg-gray-700 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600" %>
-    <%= button_to "Delete", activity_path(@activity), method: :delete, class: "bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800", data: { turbo_confirm: "Are you sure?" } %>
-    <%= link_to "Back", contact_path(@activity.contact), class: "text-gray-400 hover:text-cyan-400" %>
-  </div>
+<div class="mt-10 flex flex-wrap items-center gap-3">
+  <%= link_to "Edit", edit_activity_path(@activity), class: "btn-quiet" %>
+  <%= button_to "Delete", activity_path(@activity), method: :delete, form_class: "inline", class: "btn-quiet text-madder border-madder", data: { turbo_confirm: "Delete this activity?" } %>
+  <%= link_to "Back", contact_path(@activity.contact), class: "text-gray-400 hover:text-bone ml-2" %>
 </div>
